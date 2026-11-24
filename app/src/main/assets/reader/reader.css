@@ -152,15 +152,18 @@ body {
 }
 
 /* The reader's Text Direction setting. "Auto" keeps the direction detected
-   for each chapter; these override it. */
+   for each chapter; these override it, including any direction the source's
+   own markup sets inside the chapter. */
 body[data-text-direction="rtl"] .chapter-body,
+body[data-text-direction="rtl"] .chapter-body *,
 body[data-text-direction="rtl"] .chapter-card-title {
-  direction: rtl;
+  direction: rtl !important;
 }
 
 body[data-text-direction="ltr"] .chapter-body,
+body[data-text-direction="ltr"] .chapter-body *,
 body[data-text-direction="ltr"] .chapter-card-title {
-  direction: ltr;
+  direction: ltr !important;
 }
 
 /* ==========================================================================
