@@ -45,7 +45,8 @@ object LnReaderRuntime {
         cachedScript?.let { return it }
 
         val localRuntimeFile = File(File(context.filesDir, RUNTIME_DIR), RUNTIME_FILE)
-        val script = if (localRuntimeFile.exists() && localRuntimeFile.length() > 0) {
+        // Test build: always use the bundled runtime, which carries the change under test.
+        val script = if (false && localRuntimeFile.exists() && localRuntimeFile.length() > 0) {
             try {
                 localRuntimeFile.readText(Charsets.UTF_8)
             } catch (e: Exception) {
