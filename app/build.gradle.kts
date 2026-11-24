@@ -49,6 +49,11 @@ android {
     ndkVersion = "30.0.16248370"
 
     buildTypes {
+        debug {
+            // Test build only: installs next to the official app.
+            applicationIdSuffix = ".rtltest"
+            versionNameSuffix = "-rtltest"
+        }
         release {
             optimization {
                 enable = false

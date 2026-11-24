@@ -1,0 +1,44 @@
+name: Test APK
+
+on:
+  push:
+    branches: [test-build/epub-rtl]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Keep one debug signing key between builds
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: rtltest-debug-keystore
+
+      - name: Build debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug -x lint
+
+      - name: Publish test release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          apk=$(ls app/build/outputs/apk/debug/*.apk | grep -i universal | head -1)
+          [ -n "$apk" ] || apk=$(ls app/build/outputs/apk/debug/*.apk | head -1)
+          cp "$apk" Bunori-rtl-test.apk
+          gh release delete rtl-test --yes --cleanup-tag || true
+          gh release create rtl-test Bunori-rtl-test.apk --prerelease --target "$GITHUB_SHA" \
+            --title "Bunori RTL EPUB test build" \
+            --notes "Debug build of feature/epub-rtl-language for testing. Installs next to the official app (package com.halovoid.bunori.rtltest)."
