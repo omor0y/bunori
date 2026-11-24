@@ -18,6 +18,7 @@ import java.io.File
 import com.halovoid.bunori.domain.models.CustomFont
 import com.halovoid.bunori.domain.models.ReaderSettings
 import com.halovoid.bunori.domain.models.ReaderTextAlign
+import com.halovoid.bunori.domain.models.ReaderTextDirection
 import com.halovoid.bunori.domain.models.ReaderTheme
 import com.halovoid.bunori.domain.models.ReadingMode
 import com.halovoid.bunori.extension.api.models.ExtensionRepo
@@ -657,6 +658,10 @@ class SettingsViewModel(
 
     fun updateTextAlign(align: ReaderTextAlign) = viewModelScope.launch {
         preferenceRepository.updateReaderTextAlign(align)
+    }
+
+    fun updateTextDirection(direction: ReaderTextDirection) = viewModelScope.launch {
+        preferenceRepository.updateReaderTextDirection(direction)
     }
 
     fun updateVolumeKeyPageTurn(enabled: Boolean) = viewModelScope.launch {

@@ -13,6 +13,7 @@ import com.halovoid.bunori.domain.models.ChapterPayload
 import com.halovoid.bunori.domain.models.CustomFont
 import com.halovoid.bunori.domain.models.ReaderSettings
 import com.halovoid.bunori.domain.models.ReaderTextAlign
+import com.halovoid.bunori.domain.models.ReaderTextDirection
 import com.halovoid.bunori.domain.models.ReaderTheme
 import com.halovoid.bunori.domain.models.ReadingMode
 import kotlinx.coroutines.Dispatchers
@@ -374,6 +375,10 @@ class ReaderViewModel(
 
     fun updateTextAlign(align: ReaderTextAlign) = viewModelScope.launch {
         preferenceRepository.updateReaderTextAlign(align)
+    }
+
+    fun updateTextDirection(direction: ReaderTextDirection) = viewModelScope.launch {
+        preferenceRepository.updateReaderTextDirection(direction)
     }
 
     fun updateVolumeKeyPageTurn(enabled: Boolean) = viewModelScope.launch {

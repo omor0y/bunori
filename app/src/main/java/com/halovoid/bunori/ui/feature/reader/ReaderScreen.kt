@@ -268,6 +268,7 @@ fun ReaderScreen(
                 onUpdateLineHeight = viewModel::updateLineHeight,
                 onUpdatePadding = viewModel::updateHorizontalPadding,
                 onUpdateTextAlign = viewModel::updateTextAlign,
+                onUpdateTextDirection = viewModel::updateTextDirection,
                 onUpdateVolumeKeyTurn = viewModel::updateVolumeKeyPageTurn,
                 onUpdateKeepScreenAwake = viewModel::updateKeepScreenAwake,
                 onUpdateDimImages = viewModel::updateDimImages,

@@ -748,6 +748,8 @@
     if (settings.fontFamily) root.style.setProperty('--reader-font-family', `"${settings.fontFamily}", serif`);
     if (settings.paddingH) root.style.setProperty('--reader-padding-h', settings.paddingH + 'px');
     if (settings.textAlign) root.style.setProperty('--reader-text-align', settings.textAlign);
+    // 'auto' keeps each chapter's detected direction; 'rtl' and 'ltr' override it (see reader.css).
+    if (settings.textDirection) document.body.dataset.textDirection = settings.textDirection;
     if (settings.accentColor) root.style.setProperty('--reader-accent-color', settings.accentColor);
 
     if (settings.theme) {

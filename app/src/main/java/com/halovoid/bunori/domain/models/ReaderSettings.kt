@@ -26,6 +26,14 @@ enum class ReaderTextAlign(val id: String, val cssValue: String, val displayName
 }
 
 @Serializable
+enum class ReaderTextDirection(val id: String, val displayName: String) {
+    // Detected from each chapter's text, so right-to-left chapters read right to left.
+    AUTO("auto", "Auto"),
+    RTL("rtl", "Right to left"),
+    LTR("ltr", "Left to right")
+}
+
+@Serializable
 data class CustomFont(
     val name: String,
     val filePath: String
@@ -52,6 +60,7 @@ data class ReaderSettings(
     val paragraphSpacingEm: Float = 1.25f,
     val horizontalPaddingDp: Int = 18,
     val textAlign: ReaderTextAlign = ReaderTextAlign.START,
+    val textDirection: ReaderTextDirection = ReaderTextDirection.AUTO,
     val volumeKeyPageTurn: Boolean = false,
     val keepScreenAwake: Boolean = false,
     val dimImagesInDarkMode: Boolean = true,

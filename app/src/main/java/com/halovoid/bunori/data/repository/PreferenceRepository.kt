@@ -13,6 +13,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.halovoid.bunori.domain.models.CustomFont
 import com.halovoid.bunori.domain.models.ReaderSettings
 import com.halovoid.bunori.domain.models.ReaderTextAlign
+import com.halovoid.bunori.domain.models.ReaderTextDirection
 import com.halovoid.bunori.domain.models.ReaderTheme
 import com.halovoid.bunori.domain.models.ReadingMode
 import com.halovoid.bunori.extension.api.ExtensionJson
@@ -71,6 +72,7 @@ private val READER_LETTER_SPACING = floatPreferencesKey("reader_letter_spacing")
 private val READER_PARAGRAPH_SPACING = floatPreferencesKey("reader_paragraph_spacing")
 private val READER_PADDING_H = intPreferencesKey("reader_padding_h")
 private val READER_TEXT_ALIGN = stringPreferencesKey("reader_text_align")
+private val READER_TEXT_DIRECTION = stringPreferencesKey("reader_text_direction")
 private val READER_VOLUME_KEY_PAGE_TURN = booleanPreferencesKey("reader_volume_key_page_turn")
 private val READER_KEEP_SCREEN_AWAKE = booleanPreferencesKey("reader_keep_screen_awake")
 private val READER_DIM_IMAGES = booleanPreferencesKey("reader_dim_images")
@@ -165,6 +167,7 @@ interface PreferenceRepository {
     suspend fun updateReaderLineHeight(lineHeight: Float)
     suspend fun updateReaderPadding(paddingDp: Int)
     suspend fun updateReaderTextAlign(align: ReaderTextAlign)
+    suspend fun updateReaderTextDirection(direction: ReaderTextDirection)
     suspend fun updateVolumeKeyPageTurn(enabled: Boolean)
     suspend fun updateKeepScreenAwake(enabled: Boolean)
     suspend fun updateDimImages(enabled: Boolean)
@@ -667,6 +670,8 @@ class PreferenceRepositoryImpl private constructor(
             // "LEFT" was saved before Start replaced it, and falls back to Start.
             val alignStr = prefs[READER_TEXT_ALIGN] ?: ReaderTextAlign.START.name
             val align = runCatching { ReaderTextAlign.valueOf(alignStr) }.getOrDefault(ReaderTextAlign.START)
+            val directionStr = prefs[READER_TEXT_DIRECTION] ?: ReaderTextDirection.AUTO.name
+            val direction = runCatching { ReaderTextDirection.valueOf(directionStr) }.getOrDefault(ReaderTextDirection.AUTO)
 
             ReaderSettings(
                 theme = theme,
@@ -678,6 +683,7 @@ class PreferenceRepositoryImpl private constructor(
                 paragraphSpacingEm = prefs[READER_PARAGRAPH_SPACING] ?: 1.25f,
                 horizontalPaddingDp = prefs[READER_PADDING_H] ?: 18,
                 textAlign = align,
+                textDirection = direction,
                 volumeKeyPageTurn = prefs[READER_VOLUME_KEY_PAGE_TURN] ?: false,
                 keepScreenAwake = prefs[READER_KEEP_SCREEN_AWAKE] ?: false,
                 dimImagesInDarkMode = prefs[READER_DIM_IMAGES] ?: true,
@@ -698,6 +704,7 @@ class PreferenceRepositoryImpl private constructor(
             prefs[READER_PARAGRAPH_SPACING] = settings.paragraphSpacingEm
             prefs[READER_PADDING_H] = settings.horizontalPaddingDp
             prefs[READER_TEXT_ALIGN] = settings.textAlign.name
+            prefs[READER_TEXT_DIRECTION] = settings.textDirection.name
             prefs[READER_VOLUME_KEY_PAGE_TURN] = settings.volumeKeyPageTurn
             prefs[READER_KEEP_SCREEN_AWAKE] = settings.keepScreenAwake
             prefs[READER_DIM_IMAGES] = settings.dimImagesInDarkMode
@@ -733,6 +740,10 @@ class PreferenceRepositoryImpl private constructor(
 
     override suspend fun updateReaderTextAlign(align: ReaderTextAlign) {
         context.appDataStore.edit { it[READER_TEXT_ALIGN] = align.name }
+    }
+
+    override suspend fun updateReaderTextDirection(direction: ReaderTextDirection) {
+        context.appDataStore.edit { it[READER_TEXT_DIRECTION] = direction.name }
     }
 
     override suspend fun updateVolumeKeyPageTurn(enabled: Boolean) {

@@ -404,6 +404,7 @@ private fun ReaderSettings.toJsSettingsJson(accentHex: String = "#7C3AED"): Stri
         put("fontFamily", fontFamily)
         put("paddingH", horizontalPaddingDp)
         put("textAlign", textAlign.cssValue)
+        put("textDirection", textDirection.id)
         put("theme", theme.id)
         put("readingMode", readingMode.id)
         put("dimImages", dimImagesInDarkMode)

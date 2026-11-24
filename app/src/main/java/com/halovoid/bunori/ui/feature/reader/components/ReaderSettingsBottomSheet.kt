@@ -32,6 +32,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.halovoid.bunori.domain.models.CustomFont
 import com.halovoid.bunori.domain.models.ReaderSettings
 import com.halovoid.bunori.domain.models.ReaderTextAlign
+import com.halovoid.bunori.domain.models.ReaderTextDirection
 import com.halovoid.bunori.domain.models.ReaderTheme
 import com.halovoid.bunori.domain.models.ReadingMode
 import com.halovoid.bunori.ui.core.components.AppBottomSheet
@@ -64,6 +65,7 @@ fun ReaderSettingsBottomSheet(
     onUpdateLineHeight: (Float) -> Unit,
     onUpdatePadding: (Int) -> Unit,
     onUpdateTextAlign: (ReaderTextAlign) -> Unit,
+    onUpdateTextDirection: (ReaderTextDirection) -> Unit = {},
     onUpdateVolumeKeyTurn: (Boolean) -> Unit,
     onUpdateKeepScreenAwake: (Boolean) -> Unit = {},
     onUpdateDimImages: (Boolean) -> Unit = {},
@@ -91,6 +93,7 @@ fun ReaderSettingsBottomSheet(
             onUpdateLineHeight = onUpdateLineHeight,
             onUpdatePadding = onUpdatePadding,
             onUpdateTextAlign = onUpdateTextAlign,
+            onUpdateTextDirection = onUpdateTextDirection,
             onUpdateVolumeKeyTurn = onUpdateVolumeKeyTurn,
             onUpdateKeepScreenAwake = onUpdateKeepScreenAwake,
             onUpdateDimImages = onUpdateDimImages,
@@ -118,6 +121,7 @@ fun ReaderSettingsContent(
     onUpdateLineHeight: (Float) -> Unit = {},
     onUpdatePadding: (Int) -> Unit = {},
     onUpdateTextAlign: (ReaderTextAlign) -> Unit = {},
+    onUpdateTextDirection: (ReaderTextDirection) -> Unit = {},
     onUpdateVolumeKeyTurn: (Boolean) -> Unit = {},
     onUpdateKeepScreenAwake: (Boolean) -> Unit = {},
     onUpdateDimImages: (Boolean) -> Unit = {},
@@ -325,6 +329,22 @@ fun ReaderSettingsContent(
                     onClick = { onUpdateTextAlign(ReaderTextAlign.CENTER) },
                     modifier = Modifier.weight(1f)
                 )
+            }
+
+            // Text Direction: Auto follows each chapter's text; the others override it.
+            SectionHeader(title = "Text Direction")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ReaderTextDirection.entries.forEach { direction ->
+                    OptionSelectableChip(
+                        label = direction.displayName,
+                        isSelected = settings.textDirection == direction,
+                        onClick = { onUpdateTextDirection(direction) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
 
             // 8. Toggles

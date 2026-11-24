@@ -151,6 +151,18 @@ body {
   width: 100%;
 }
 
+/* The reader's Text Direction setting. "Auto" keeps the direction detected
+   for each chapter; these override it. */
+body[data-text-direction="rtl"] .chapter-body,
+body[data-text-direction="rtl"] .chapter-card-title {
+  direction: rtl;
+}
+
+body[data-text-direction="ltr"] .chapter-body,
+body[data-text-direction="ltr"] .chapter-card-title {
+  direction: ltr;
+}
+
 /* ==========================================================================
    Chapter Transition Cards (Start & End Metadata)
    ========================================================================== */
@@ -211,6 +223,8 @@ body.loading-next .chapter-wrapper:last-child .chapter-card-end {
   color: #FFFFFF;
   line-height: 1.4;
   margin-bottom: 8px;
+  /* Full width, so a right-to-left title can sit on the right. */
+  align-self: stretch;
   text-align: start;
   font-synthesis: weight !important;
 }
