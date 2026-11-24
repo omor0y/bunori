@@ -75,7 +75,7 @@
   --reader-padding-h: 18px;
   --reader-padding-top: 32px;
   --reader-padding-bottom: 80px;
-  --reader-text-align: left;
+  --reader-text-align: start;
   --reader-image-opacity: 1;
   --reader-card-bg: rgba(255, 255, 255, 0.04);
   --reader-card-border: rgba(255, 255, 255, 0.08);
@@ -211,7 +211,7 @@ body.loading-next .chapter-wrapper:last-child .chapter-card-end {
   color: #FFFFFF;
   line-height: 1.4;
   margin-bottom: 8px;
-  text-align: left;
+  text-align: start;
   font-synthesis: weight !important;
 }
 

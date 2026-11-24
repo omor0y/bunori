@@ -306,9 +306,9 @@ fun ReaderSettingsContent(
             ) {
                 AlignChip(
                     icon = Icons.AutoMirrored.Filled.FormatAlignLeft,
-                    label = "Left",
-                    isSelected = settings.textAlign == ReaderTextAlign.LEFT,
-                    onClick = { onUpdateTextAlign(ReaderTextAlign.LEFT) },
+                    label = "Start",
+                    isSelected = settings.textAlign == ReaderTextAlign.START,
+                    onClick = { onUpdateTextAlign(ReaderTextAlign.START) },
                     modifier = Modifier.weight(1f)
                 )
                 AlignChip(

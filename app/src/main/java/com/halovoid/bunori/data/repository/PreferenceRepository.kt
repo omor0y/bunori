@@ -664,8 +664,9 @@ class PreferenceRepositoryImpl private constructor(
             val modeStr = prefs[READER_READING_MODE] ?: ReadingMode.CONTINUOUS.name
             val mode = runCatching { ReadingMode.valueOf(modeStr) }.getOrDefault(ReadingMode.CONTINUOUS)
 
-            val alignStr = prefs[READER_TEXT_ALIGN] ?: ReaderTextAlign.LEFT.name
-            val align = runCatching { ReaderTextAlign.valueOf(alignStr) }.getOrDefault(ReaderTextAlign.LEFT)
+            // "LEFT" was saved before Start replaced it, and falls back to Start.
+            val alignStr = prefs[READER_TEXT_ALIGN] ?: ReaderTextAlign.START.name
+            val align = runCatching { ReaderTextAlign.valueOf(alignStr) }.getOrDefault(ReaderTextAlign.START)
 
             ReaderSettings(
                 theme = theme,

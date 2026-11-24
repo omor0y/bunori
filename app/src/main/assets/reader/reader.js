@@ -137,20 +137,24 @@
     wrapper.dataset.chapterScanlator = data.scanlator || '';
 
     const headingText = formatChapterHeading(data.index, data.title);
+    // Text direction and language come from the app, which detects them from
+    // the chapter text. Older callers that don't pass them keep left-to-right.
+    const textDir = data.dir === 'rtl' ? 'rtl' : 'ltr';
+    const langAttr = data.lang ? ` lang="${escapeHtml(data.lang)}"` : '';
     const scanlatorHtml = data.scanlator ? `<div class="chapter-card-scanlator">${escapeHtml(data.scanlator)}</div>` : '';
 
     wrapper.innerHTML = `
       <div class="chapter-card chapter-card-start">
         <div class="chapter-card-label">Start:</div>
-        <div class="chapter-card-title">${escapeHtml(headingText)}</div>
+        <div class="chapter-card-title" dir="${textDir}">${escapeHtml(headingText)}</div>
         ${scanlatorHtml}
       </div>
-      <div class="chapter-body">
+      <div class="chapter-body" dir="${textDir}"${langAttr}>
         ${data.htmlContent || ''}
       </div>
       <div class="chapter-card chapter-card-end">
         <div class="chapter-card-label">End:</div>
-        <div class="chapter-card-title">${escapeHtml(headingText)}</div>
+        <div class="chapter-card-title" dir="${textDir}">${escapeHtml(headingText)}</div>
         ${scanlatorHtml}
       </div>
     `;
@@ -568,13 +572,15 @@
     updateTopSentinelBanner();
   };
 
-  window.setInitialChapterB64 = function (id, b64Title, index, b64Html, startAtEnd, b64Scanlator) {
+  window.setInitialChapterB64 = function (id, b64Title, index, b64Html, startAtEnd, b64Scanlator, dir, lang) {
     window.setInitialChapter({
       id: id,
       title: decodeB64(b64Title),
       index: index,
       htmlContent: decodeB64(b64Html),
-      scanlator: decodeB64(b64Scanlator)
+      scanlator: decodeB64(b64Scanlator),
+      dir: dir,
+      lang: lang
     }, startAtEnd === true);
   };
 
@@ -610,13 +616,15 @@
     pruneOldestChapter();
   };
 
-  window.appendChapterB64 = function (id, b64Title, index, b64Html, b64Scanlator) {
+  window.appendChapterB64 = function (id, b64Title, index, b64Html, b64Scanlator, dir, lang) {
     window.appendChapter({
       id: id,
       title: decodeB64(b64Title),
       index: index,
       htmlContent: decodeB64(b64Html),
-      scanlator: decodeB64(b64Scanlator)
+      scanlator: decodeB64(b64Scanlator),
+      dir: dir,
+      lang: lang
     });
   };
 
@@ -683,13 +691,15 @@
     pruneNewestChapter();
   };
 
-  window.prependChapterB64 = function (id, b64Title, index, b64Html, b64Scanlator) {
+  window.prependChapterB64 = function (id, b64Title, index, b64Html, b64Scanlator, dir, lang) {
     window.prependChapter({
       id: id,
       title: decodeB64(b64Title),
       index: index,
       htmlContent: decodeB64(b64Html),
-      scanlator: decodeB64(b64Scanlator)
+      scanlator: decodeB64(b64Scanlator),
+      dir: dir,
+      lang: lang
     });
   };
 

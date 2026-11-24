@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.webkit.WebViewAssetLoader
+import com.halovoid.bunori.data.artifact.generators.detectBookLanguage
 import com.halovoid.bunori.domain.models.ChapterPayload
 import com.halovoid.bunori.domain.models.CustomFont
 import com.halovoid.bunori.domain.models.ReaderSettings
@@ -315,6 +316,13 @@ fun ReaderWebView(
     }
 }
 
+// The chapter's text direction and language as reader.js arguments, e.g. "rtl", "ar".
+// Left-to-right chapters pass no language, so their pages behave as before.
+private fun textDirectionArgs(html: String): String {
+    val language = detectBookLanguage(html)
+    return if (language.isRtl) "\"rtl\", \"${language.code}\"" else "\"ltr\", \"\""
+}
+
 private fun executeReaderCommand(webView: WebView, command: ReaderCommand) {
     when (command) {
         is ReaderCommand.SetInitialChapter -> {
@@ -322,7 +330,7 @@ private fun executeReaderCommand(webView: WebView, command: ReaderCommand) {
             val b64Title = encodeB64(command.payload.title)
             val b64Scanlator = encodeB64(command.payload.scanlator)
             val script = """
-                window.setInitialChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", ${command.startAtEnd}, "$b64Scanlator");
+                window.setInitialChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", ${command.startAtEnd}, "$b64Scanlator", ${textDirectionArgs(command.payload.htmlContent)});
                 window.setHasMorePrevious(${command.hasPrevious});
                 window.setHasMoreNext(${command.hasNext});
             """.trimIndent()
@@ -338,7 +346,7 @@ private fun executeReaderCommand(webView: WebView, command: ReaderCommand) {
             val b64Title = encodeB64(command.payload.title)
             val b64Scanlator = encodeB64(command.payload.scanlator)
             val script = """
-                window.appendChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", "$b64Scanlator");
+                window.appendChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", "$b64Scanlator", ${textDirectionArgs(command.payload.htmlContent)});
                 window.setHasMoreNext(${command.hasNext});
             """.trimIndent()
             webView.evaluateJavascript(script) {
@@ -353,7 +361,7 @@ private fun executeReaderCommand(webView: WebView, command: ReaderCommand) {
             val b64Title = encodeB64(command.payload.title)
             val b64Scanlator = encodeB64(command.payload.scanlator)
             val script = """
-                window.prependChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", "$b64Scanlator");
+                window.prependChapterB64(${command.payload.id}, "$b64Title", ${command.payload.index}, "$b64Html", "$b64Scanlator", ${textDirectionArgs(command.payload.htmlContent)});
                 window.setHasMorePrevious(${command.hasPrevious});
             """.trimIndent()
             webView.evaluateJavascript(script) {

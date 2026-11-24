@@ -18,7 +18,9 @@ enum class ReadingMode(val id: String, val displayName: String) {
 
 @Serializable
 enum class ReaderTextAlign(val id: String, val cssValue: String, val displayName: String) {
-    LEFT("left", "left", "Left"),
+    // Start follows the text direction: left for left-to-right text, right for
+    // Arabic, Hebrew and other right-to-left text.
+    START("start", "start", "Start"),
     JUSTIFY("justify", "justify", "Justified"),
     CENTER("center", "center", "Center")
 }
@@ -49,7 +51,7 @@ data class ReaderSettings(
     val letterSpacing: Float = 0.01f,
     val paragraphSpacingEm: Float = 1.25f,
     val horizontalPaddingDp: Int = 18,
-    val textAlign: ReaderTextAlign = ReaderTextAlign.LEFT,
+    val textAlign: ReaderTextAlign = ReaderTextAlign.START,
     val volumeKeyPageTurn: Boolean = false,
     val keepScreenAwake: Boolean = false,
     val dimImagesInDarkMode: Boolean = true,
